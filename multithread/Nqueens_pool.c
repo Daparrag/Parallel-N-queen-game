@@ -1,3 +1,36 @@
+/*  (from Sloane's On-Line Encyclopedia of Integer Sequences,
+ *   Sequence A000170
+ *   http://www.research.att.com/cgi-bin/access.cgi/as/njas/sequences/eisA.cgi?Anum=000170
+ *   )
+ *
+ *   Board Size:       Number of Solutions to          Time to calculate
+ *   (length of one        N queens problem:              on 800MHz PC
+ *    side of N x N                                    (Hours:Mins:Secs)
+ *    chessboard)
+ *
+ *     1                                  1                    n/a
+ *     2                                  0                   < 0 seconds
+ *     3                                  0                   < 0 seconds
+ *     4                                  2                   < 0 seconds
+ *     5                                 10                   < 0 seconds
+ *     6                                  4                   < 0 seconds
+ *     7                                 40                   < 0 seconds
+ *     8                                 92                   < 0 seconds
+ *     9                                352                   < 0 seconds
+ *    10                                724                   < 0 seconds
+ *    11                               2680                   < 0 seconds
+ *    12                              14200                   < 0 seconds
+ *    13                              73712                   < 0 seconds
+ *    14                             365596                  00:00:01
+ *    15                            2279184                  00:00:04
+ *    16                           14772512                  00:00:23
+ *    17                           95815104                  00:02:38
+ *    18                          666090624                  00:19:26
+*/
+
+
+
+
 #include <iostream>
 #include <vector>
 #include <assert.h>
@@ -29,6 +62,7 @@
 #ifndef NULL
 #define NULL 0
 #endif
+
 
 pthread_mutex_t mutexqueen;
 pthread_mutexattr_t Attr;
@@ -67,12 +101,12 @@ struct passing_variables{
 	tree_node *in_root;
 	int in_level;
 	int in_Nqueens;
+	int set_split;
+	double maximum_split;
+	int deep_level;
 	struct queen * partial_seq;
+	
 };
-
-
-
-
 
 
 struct variables global_variables;
@@ -390,6 +424,9 @@ tree_node * root;
 long _level;
 long _Nqueens;
 int new_solv=0;	
+int rq_split=0;	
+int _split_ratio=0;	
+int _ldeep=0;
 unsigned int i;	
 struct queen temp_queen;
 	
@@ -400,6 +437,9 @@ struct queen temp_queen;
 	local_queen_seq = Clone_queen_list(variables.partial_seq);
 	_level=variables.in_level;
 	_Nqueens=variables.in_Nqueens;
+	rq_split=variables.set_split;
+	_ldeep=variables.deep_level;
+	_split_ratio=variables.maximum_split;
 
 /*evaluate if we are in the root element of the tree*/
 	if(root->node_value==-1){
@@ -443,9 +483,11 @@ struct queen temp_queen;
 	if(new_solv){
 		/*in case of new solution... a new task is attached to the thread_pool y exit form the program*/
 			int next_num_thread = root->child_num;//number of children form the previous computation.
-			struct passing_variables *variables_out=(passing_variables*)malloc(1 * sizeof(passing_variables)); //number of new task.
-			struct queen * tx_sequence_copy;
-			//int index=0;
+			passing_variables * variables_split_out[next_num_thread-1]; //in  case to split at least child_num-1 will have done; 
+			passing_variables *variables_out=new passing_variables();
+			//struct passing_variables *variables_out=(passing_variables*)malloc(1 * sizeof(passing_variables)); //number of new task.
+			//struct queen * tx_sequence_copy;
+			int index=0;
 			//int rc;/*for catch thread creation problems*/
 			//tx_sequence_copy= //commun TX copy for all the childrens in case of more than on
 
@@ -455,20 +497,50 @@ struct queen temp_queen;
 			//	(variables_out)->partial_seq=Clone_queen_list(local_queen_seq);
 			//	(variables_out)->in_root=root->child[0];
 			//	rc = threadpool_add(global_variables.thpool,fun_ptr,(void*)(variables_out),0);
-			//	index++;
+			//	
 			//}
 
 				for(i=0; i < next_num_thread; i++){
-					
+					(variables_out)->partial_seq=new queen();
+					(variables_out)->in_root=new tree_node();
 					(variables_out)->in_level=_level;
 					(variables_out)->in_Nqueens=_Nqueens;
-					(variables_out)->partial_seq=local_queen_seq;
+					//(variables_out)->partial_seq=local_queen_seq;
+					(variables_out)->set_split=rq_split;
+					(variables_out)->partial_seq=Clone_queen_list(local_queen_seq);	
+					//(variables_out)->maximum_split =_split_ratio;
+					(variables_out)->deep_level=_ldeep+1;
+					//(variables_out)->in_root=root->child[i];		
 					(variables_out)->in_root=root->child[i];
-					funct_solution_thread((void*)(variables_out));
+					if(rq_split && i < next_num_thread && (_ldeep == _split_ratio) && _split_ratio!=0){
+						/*the solution rich the deep_threshold, then we have to delive the sequential to other thread and jump to the next
+						  child*/
+						  /*create a new object which contain the current data*/
+						  //(variables_out)->partial_seq=local_queen_seq;
+						  //	(variables_out)->in_root=root->child[i];
+						  //(variables_out)->partial_seq=Clone_queen_list(local_queen_seq);	
+						  (variables_out)->deep_level=0;
+						  variables_split_out[index]=variables_out;
+						  /*delagate the remain computation to other thread*/
+							threadpool_add(global_variables.thpool,fun_ptr,(void*)(variables_split_out[index]),0);
+						  _ldeep=0;
+						  index++;
+						  //return;
+						  /*and then return*/
+						  //return;
+					}else{
+						/* if not split the algorithm simple continue recursivelly to 
+						search more solutions*/
+						funct_solution_thread((void*)(variables_out));
+						_ldeep=0;
+						
+					}
+					
 				}
 /*once the next execution is setup we delete variables in order to reduce the memory consuption*/
 			/*once we send the copy for all childeren we can delete our local copy for safe memory*/
 		clear_queen_list(&local_queen_seq);
+		//deep_level=0;
 		//free(variables_out);
 		return;						
 	}else if(_level != _Nqueens){
@@ -490,7 +562,7 @@ int rc;
 time_t t1, t2;
 int i;
 int j;
-int maximum_split;
+double maximum_split;
 int index;
 struct passing_variables *start_variables;
 struct passing_variables *array_variables;
@@ -525,6 +597,8 @@ if(num_threads<=queen_number){
 		(start_variables+i)->in_root=createTree_num(i);
 		(start_variables+i)->in_level=0;
 		(start_variables+i)->in_Nqueens=queen_number;
+		(start_variables+i)->set_split=0;
+		(start_variables+i)->maximum_split=0;
 		(start_variables+i)->partial_seq=NULL;
 	rc = threadpool_add(global_variables.thpool,fun_ptr,(void*)(start_variables+i),0);
 		if(rc!=0){
@@ -536,7 +610,8 @@ thpool_wait(global_variables.thpool);
 time(&t2);
 }else{
 	/*start a subdivision*/
-
+	double thold=round((double)(queen_number * queen_number) / (double)num_threads)-1;
+	if(thold<=1)thold=queen_number/2;
 	if(num_threads >= maximum_split){
 		array_variables=(passing_variables*)malloc(maximum_split * sizeof(passing_variables));
 		struct queen * sent_seq=(struct queen*)malloc(maximum_split * sizeof(struct queen));
@@ -553,6 +628,9 @@ time(&t2);
 
 						(array_variables+index)->in_Nqueens=queen_number;
 						(array_variables+index)->in_level=1;
+						(array_variables+index)->set_split=1;
+						(array_variables+index)->maximum_split=thold;
+						(array_variables+index)->deep_level=1;				
 						(array_variables+index)->partial_seq=(sent_seq+index);
 						(array_variables+index)->in_root=createTree_num(j);
 
@@ -574,9 +652,10 @@ time(&t2);
 			int	midle=0;
 			
 			if((midle=ceil((float)num_threads/(float)(queen_number-3)))>(queen_number-2)){
-				n_extremes=ceil((num_threads-((queen_number-3)*(queen_number-2)))/(queen_number-2));
+				midle=queen_number-2;
+				n_extremes=ceil(abs((float)num_threads-((float)(queen_number-3)*(float)(queen_number-2)))/(float)(queen_number-2));
+				
 			}
-			
 			/*split the secuence*/
 		array_variables=(passing_variables*)malloc(maximum_split * sizeof(passing_variables));
 		struct queen * sent_seq=(struct queen*)malloc(maximum_split * sizeof(struct queen));
@@ -595,6 +674,9 @@ time(&t2);
 						
 							(array_variables+index)->in_Nqueens=queen_number;
 							(array_variables+index)->in_level=1;
+							(array_variables+index)->set_split=1;
+							(array_variables+index)->deep_level=1;
+							(array_variables+index)->maximum_split=thold;
 							(array_variables+index)->partial_seq=(sent_seq+index);
 							(array_variables+index)->in_root=createTree_num(j);
 							
@@ -607,8 +689,12 @@ time(&t2);
 						}	
 					}else {end_split=1; break;}
 				}if(i <= queen_number-2 &&end_split==1 ){
+					
 					(array_variables+index)->in_root=createTree_num(i);
 					(array_variables+index)->in_level=0;
+					(array_variables+index)->set_split=1;
+					(array_variables+index)->deep_level=0;
+					(array_variables+index)->maximum_split=thold;
 					(array_variables+index)->in_Nqueens=queen_number;
 					(array_variables+index)->partial_seq=NULL;
 							
@@ -636,6 +722,9 @@ time(&t2);
 							(array_variables+index)->in_Nqueens=queen_number;
 							(array_variables+index)->in_level=1;
 							(array_variables+index)->partial_seq=(sent_seq+index);
+							(array_variables+index)->set_split=1;
+							(array_variables+index)->maximum_split=thold;
+							(array_variables+index)->deep_level=1;
 							(array_variables+index)->in_root=createTree_num(j);
 							
 							rc = threadpool_add(global_variables.thpool,fun_ptr,(void*)(array_variables+index),0);
@@ -643,8 +732,9 @@ time(&t2);
 								PRINTF("ERROR: return code from thpool_add_work() is %d\n", rc);
 								exit(-1);
 							}
+							index++;
 						}
-						index++;
+						
 					}
 				split--;
 				i=queen_number-1;
@@ -655,6 +745,9 @@ time(&t2);
 						(array_variables+index)->in_Nqueens=queen_number;
 						(array_variables+index)->in_level=0;
 						(array_variables+index)->partial_seq=NULL;
+						(array_variables+index)->set_split=1;
+						(array_variables+index)->deep_level=0;
+						(array_variables+index)->maximum_split=thold;
 						(array_variables+index)->in_root=createTree_num(queen_number-1);
 						
 						rc = threadpool_add(global_variables.thpool,fun_ptr,(void*)(array_variables+index),0);
@@ -671,6 +764,9 @@ time(&t2);
 						(array_variables+index)->in_Nqueens=queen_number;
 						(array_variables+index)->in_level=0;
 						(array_variables+index)->partial_seq=NULL;
+						(array_variables+index)->set_split=1;
+						(array_variables+index)->deep_level=0;
+						(array_variables+index)->maximum_split=thold;
 						(array_variables+index)->in_root=createTree_num(i);
 						
 						rc = threadpool_add(global_variables.thpool,fun_ptr,(void*)(array_variables+index),0);
