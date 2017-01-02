@@ -72,12 +72,12 @@ int threadpool_add(threadpool_t *pool, void (*routine)(void *),
  */
 int threadpool_destroy(threadpool_t *pool, int flags);
 
-/**
- * @function threadpool_wait
+/**/
+ /* @function threadpool_wait*/
  /* Wait until all jobs have finished */
 void thpool_wait(void * threadpool);
 
-/* @function threadpool_wait
+/* @function threadpool_wait*/
  /* return the number of free space of the queue*/
 int queue_size(threadpool_t *pool);
 
