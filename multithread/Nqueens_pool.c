@@ -35,7 +35,7 @@
 #include <vector>
 #include <assert.h>
 #include <stdlib.h>
-#include <time.h>
+#include <sys/timeb.h>
 #include <string.h>
 #include <sys/types.h>
 #include <atomic>
@@ -153,37 +153,36 @@ static void unlock(void){
 
 
 /* Print the results at the end of the run */
-static void printResults(time_t* pt1, time_t* pt2)
+static void printResults(struct timeb* pt1, struct timeb* pt2)
 {
-    double secs;
-    int hours , mins, intsecs;
-
-    printf("End: \t%s", ctime(pt2));
-    secs = difftime(*pt2, *pt1);
-    intsecs = (double)secs;
-	printf("%d \n",intsecs);
-    printf("Calculations took %d second%s.\n", intsecs, (intsecs == 1 ? "" : "s"));
+    float secs;
+  
+    //printf("End: \t%s", ctime(pt2->time);
+    secs = (1000.0 * (pt2->time - pt1->time)
+		       + (pt2->millitm - pt2->millitm)); 
+   
+    printf("Calculations took second%f.\n", secs);
 
 
     /* Print hours, minutes, seconds */
-    hours = intsecs/3600;
-    intsecs -= hours * 3600;
-    mins = intsecs/60;
-    intsecs -= mins * 60;
-    if (hours > 0 || mins > 0)
-    {
-        printf("Equals ");
-        if (hours > 0)
-        {
-            printf("%d hour%s, ", hours, (hours == 1) ? "" : "s");
-        }
-        if (mins > 0)
-        {
-            printf("%d minute%s and ", mins, (mins == 1) ? "" : "s");
-        }
-        printf("%d second%s.\n", intsecs, (intsecs == 1 ? "" : "s"));
+    //hours = intsecs/3600;
+    //intsecs -= hours * 3600;
+    //mins = intsecs/60;
+    //intsecs -= mins * 60;
+    //if (hours > 0 || mins > 0)
+    //{
+    //    printf("Equals ");
+    //    if (hours > 0)
+    //    {
+    //        printf("%d hour%s, ", hours, (hours == 1) ? "" : "s");
+    //    }
+    //    if (mins > 0)
+    //    {
+    //        printf("%d minute%s and ", mins, (mins == 1) ? "" : "s");
+    //    }
+    //    printf("%d second%s.\n", intsecs, (intsecs == 1 ? "" : "s"));
 
-    }
+    //}
 }
 
 
@@ -559,7 +558,7 @@ struct queen temp_queen;
 int main(int argc, char *argv[]){
 char* p;
 int rc;
-time_t t1, t2;
+ struct timeb t1, t2;
 int i;
 int j;
 double maximum_split;
@@ -589,10 +588,9 @@ set_pool_parameters(num_threads,4000,0);
 init_solv();
 maximum_split=((queen_number * queen_number) - (3*queen_number) + 2);
 global_variables.solv_tree=createTree_num(-1);
-time(&t1);
 if(num_threads<=queen_number){
 	start_variables= (passing_variables*)malloc(queen_number * sizeof(passing_variables));
-	time(&t1);
+	ftime(&t1);
 	for(i=0;i<queen_number;i++){
 		(start_variables+i)->in_root=createTree_num(i);
 		(start_variables+i)->in_level=0;
@@ -607,7 +605,7 @@ if(num_threads<=queen_number){
 		}
 	}
 thpool_wait(global_variables.thpool);
-time(&t2);
+ftime(&t2);
 }else{
 	/*start a subdivision*/
 	double thold=round((double)(queen_number * queen_number) / (double)num_threads)-1;
@@ -617,7 +615,7 @@ time(&t2);
 		struct queen * sent_seq=(struct queen*)malloc(maximum_split * sizeof(struct queen));
 		/*split the frst level of the three*/
 		index=0;
-		time(&t1);
+		ftime(&t1);
 			for(i=0;i < queen_number; i++){
 				for(j=0; j<queen_number; j++){
 					if(abs(i-j)>=2){
@@ -646,7 +644,7 @@ time(&t2);
 			}
 /*wait*/			
 thpool_wait(global_variables.thpool);
-time(&t2);
+ftime(&t2);
 		}else{			
 			int n_extremes=0;
 			int	midle=0;
@@ -662,7 +660,7 @@ time(&t2);
 			/*1. split the midle*/
 			index=0;
 			int end_split=0;
-			time(&t1);
+			ftime(&t1);
 			for(i=1;i <= queen_number-2; i++){
 				for(j=0;j<queen_number;j++){
 					if(i <= midle){
@@ -782,7 +780,7 @@ time(&t2);
 				
 			}
 thpool_wait(global_variables.thpool);		
-time(&t2);
+ftime(&t2);
 		}
 }
 
