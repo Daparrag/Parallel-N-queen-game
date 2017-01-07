@@ -28,12 +28,12 @@ FF_ROOT		= $(HOME)/fastflow
 CXX		= g++ -std=c++11
 INCLUDES	= -I $(FF_ROOT) 
 CXXFLAGS  	= -Wall -DNO_DEFAULT_MAPPING
-FF_RESULT	= Project_SPM2015/bin
-FF_MMIC		= Project_SPM2015/bin/allmmic
-FF_DOCS		= Project_SPM2015/docs
-FF_THREAD	= Project_SPM2015/multithread
-FF_SEQ		= Project_SPM2015/Sequencial
-FF_FASTFLW	= Project_SPM2015/fastflow_farm
+FF_RESULT	= bin
+FF_MMIC		= bin/allmmic
+FF_DOCS		= docs
+FF_THREAD	= multithread
+FF_SEQ		= Sequencial
+FF_FASTFLW	= fastflow_farm
 
 LDFLAGS 	=  -pthread
 OPTFLAGS	=  -O3 -finline-functions -DTRACE_FASTFLOW
