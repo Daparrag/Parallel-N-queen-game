@@ -155,13 +155,17 @@ static void unlock(void){
 /* Print the results at the end of the run */
 static void printResults(struct timeb* pt1, struct timeb* pt2)
 {
-    float secs;
+    double secs;
   
     //printf("End: \t%s", ctime(pt2->time);
-    secs = (1000.0 * (pt2->time - pt1->time)
-		       + (pt2->millitm - pt2->millitm)); 
+    //
+    //
+    //
+       double secs_t1 = ((double)(pt1->time)+((double)pt1->millitm/1000));
+       double sec_t2 = ((double)(pt2->time)+((double)pt2->millitm/1000));
+	secs = (sec_t2 - secs_t1); 
    
-    printf("Calculations took second%f.\n", secs);
+    printf("Calculations took second: %f  \n", secs);
 
 
     /* Print hours, minutes, seconds */
