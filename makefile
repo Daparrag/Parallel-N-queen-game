@@ -37,6 +37,7 @@ FF_FASTFLW	= fastflow_farm
 
 LDFLAGS 	=  -pthread
 OPTFLAGS	=  -O3 -finline-functions -DTRACE_FASTFLOW
+OPTFLAG         =  -O0 -finline-functions -DTRACE_FASTFLOW
 SOURCEC1	= tree
 SOURCEC2	= threadpool
 SOURCEC3	= queen

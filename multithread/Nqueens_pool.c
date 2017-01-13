@@ -508,7 +508,7 @@ struct queen temp_queen;
 					(variables_out)->in_root=new tree_node();
 					(variables_out)->in_level=_level;
 					(variables_out)->in_Nqueens=_Nqueens;
-					//(variables_out)->partial_seq=local_queen_seq;
+					//variables_out)->partial_seq=local_queen_seq;
 					(variables_out)->set_split=rq_split;
 					(variables_out)->partial_seq=Clone_queen_list(local_queen_seq);	
 					//(variables_out)->maximum_split =_split_ratio;
@@ -593,16 +593,21 @@ init_solv();
 maximum_split=((queen_number * queen_number) - (3*queen_number) + 2);
 global_variables.solv_tree=createTree_num(-1);
 if(num_threads<=queen_number){
-	start_variables= (passing_variables*)malloc(queen_number * sizeof(passing_variables));
-	ftime(&t1);
+
+	passing_variables * start_variables[queen_number-1];
+
+	//start_variables= (passing_variables*)malloc(queen_number * sizeof(passing_variables));
+ftime(&t1);
 	for(i=0;i<queen_number;i++){
-		(start_variables+i)->in_root=createTree_num(i);
-		(start_variables+i)->in_level=0;
-		(start_variables+i)->in_Nqueens=queen_number;
-		(start_variables+i)->set_split=0;
-		(start_variables+i)->maximum_split=0;
-		(start_variables+i)->partial_seq=NULL;
-	rc = threadpool_add(global_variables.thpool,fun_ptr,(void*)(start_variables+i),0);
+		passing_variables *variables_out=new passing_variables();
+		variables_out->in_root=createTree_num(i);
+		variables_out->in_level=0;
+		variables_out->in_Nqueens=queen_number;
+		variables_out->set_split=0;
+		variables_out->maximum_split=0;
+		variables_out->partial_seq=NULL;
+		start_variables[i]=variables_out;
+	rc = threadpool_add(global_variables.thpool,fun_ptr,(void*)(start_variables[i]),0);
 		if(rc!=0){
 			PRINTF("ERROR: return code from thpool_add_work() is %d\n", rc);
 			exit(-1);
