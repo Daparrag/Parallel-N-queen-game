@@ -1,0 +1,444 @@
+./result.sh: line 180: =: No such file or directory
+===> processing 15 <===
+
+executing sequential code....
+204 195 194 205
+
+Tseq
+
+  using 60 workers
+....
+55 56 57 57
+
+avgTpar
+56.25
+
+awk: (FILENAME=- FNR=1) fatal: division by zero attempted
+./result.sh: line 180: =: No such file or directory
+===> processing 15 <===
+
+executing sequential code....
+193 192 193 194
+
+Tseq
+
+  using 1 workers
+....
+201 200 201 200
+
+avgTpar
+200.5
+200.5
+  using 2 workers
+....
+108 109 109 110
+
+avgTpar
+109
+200.5
+  using 3 workers
+....
+74 75 76 75
+
+avgTpar
+75
+200.5
+  using 4 workers
+....
+65 63 63 63
+
+avgTpar
+63.5
+200.5
+  using 5 workers
+....
+51 51 51 50
+
+avgTpar
+50.75
+200.5
+  using 6 workers
+....
+49 51 49 50
+
+avgTpar
+49.75
+200.5
+  using 7 workers
+....
+47 47 48 50
+
+avgTpar
+48
+200.5
+  using 8 workers
+....
+44 43 41 43
+
+avgTpar
+42.75
+200.5
+  using 9 workers
+....
+106 90 107 113
+
+avgTpar
+104
+200.5
+  using 10 workers
+....
+114 112 97 120
+
+avgTpar
+110.75
+200.5
+  using 11 workers
+....
+131 132 142 140
+
+avgTpar
+136.25
+200.5
+  using 12 workers
+....
+147 153 154 162
+
+avgTpar
+154
+200.5
+  using 13 workers
+....
+158 166 179 155
+
+avgTpar
+164.5
+200.5
+  using 14 workers
+....
+183 170 165 202
+
+avgTpar
+180
+200.5
+  using 15 workers
+....
+184 170 213 178
+
+avgTpar
+186.25
+200.5
+  using 16 workers
+....
+210 182 231 253
+
+avgTpar
+219
+200.5
+  using 17 workers
+....
+239 162 246 115
+
+avgTpar
+190.5
+200.5
+  using 18 workers
+....
+130 100 134 120
+
+avgTpar
+121
+200.5
+  using 19 workers
+....
+101 143 123 133
+
+avgTpar
+125
+200.5
+  using 20 workers
+....
+192 136 132 132
+
+avgTpar
+148
+200.5
+  using 21 workers
+....
+131 131 132 132
+
+avgTpar
+131.5
+200.5
+  using 22 workers
+....
+131 132 131 132
+
+avgTpar
+131.5
+200.5
+  using 23 workers
+....
+132 130 132 131
+
+avgTpar
+131.25
+200.5
+  using 24 workers
+....
+132 131 134 132
+
+avgTpar
+132.25
+200.5
+  using 25 workers
+....
+130 130 129 129
+
+avgTpar
+129.5
+200.5
+  using 26 workers
+....
+130 129 130 129
+
+avgTpar
+129.5
+200.5
+  using 27 workers
+....
+129 129 129 129
+
+avgTpar
+129
+200.5
+  using 28 workers
+....
+129 129 129 129
+
+avgTpar
+129
+200.5
+  using 29 workers
+....
+128 130 129 129
+
+avgTpar
+129
+200.5
+  using 30 workers
+....
+128 128 128 129
+
+avgTpar
+128.25
+200.5
+  using 31 workers
+....
+130 128 130 129
+
+avgTpar
+129.25
+200.5
+  using 32 workers
+....
+129 129 128 129
+
+avgTpar
+128.75
+200.5
+  using 33 workers
+....
+128 129 127 129
+
+avgTpar
+128.25
+200.5
+  using 34 workers
+....
+129 129 129 128
+
+avgTpar
+128.75
+200.5
+  using 35 workers
+....
+128 129 128 129
+
+avgTpar
+128.5
+200.5
+  using 36 workers
+....
+127 129 127 128
+
+avgTpar
+127.75
+200.5
+  using 37 workers
+....
+123 125 124 124
+
+avgTpar
+124
+200.5
+  using 38 workers
+....
+124 123 125 125
+
+avgTpar
+124.25
+200.5
+  using 39 workers
+....
+123 123 124 123
+
+avgTpar
+123.25
+200.5
+  using 40 workers
+....
+124 124 123 123
+
+avgTpar
+123.5
+200.5
+  using 41 workers
+....
+124 123 124 127
+
+avgTpar
+124.5
+200.5
+  using 42 workers
+....
+124 124 124 123
+
+avgTpar
+123.75
+200.5
+  using 43 workers
+....
+124 123 125 122
+
+avgTpar
+123.5
+200.5
+  using 44 workers
+....
+124 124 124 124
+
+avgTpar
+124
+200.5
+  using 45 workers
+....
+124 124 124 124
+
+avgTpar
+124
+200.5
+  using 46 workers
+....
+124 124 123 123
+
+avgTpar
+123.5
+200.5
+  using 47 workers
+....
+123 123 123 123
+
+avgTpar
+123
+200.5
+  using 48 workers
+....
+124 118 124 122
+
+avgTpar
+122
+200.5
+  using 49 workers
+....
+117 118 118 117
+
+avgTpar
+117.5
+200.5
+  using 50 workers
+....
+118 118 117 118
+
+avgTpar
+117.75
+200.5
+  using 51 workers
+....
+116 115 117 117
+
+avgTpar
+116.25
+200.5
+  using 52 workers
+....
+116 118 117 117
+
+avgTpar
+117
+200.5
+  using 53 workers
+....
+118 115 118 118
+
+avgTpar
+117.25
+200.5
+  using 54 workers
+....
+118 118 117 117
+
+avgTpar
+117.5
+200.5
+  using 55 workers
+....
+118 117 117 116
+
+avgTpar
+117
+200.5
+  using 56 workers
+....
+116 117 115 116
+
+avgTpar
+116
+200.5
+  using 57 workers
+....
+117 116 116 118
+
+avgTpar
+116.75
+200.5
+  using 58 workers
+....
+117 118 117 116
+
+avgTpar
+117
+200.5
+  using 59 workers
+....
+116 117 115 113
+
+avgTpar
+115.25
+200.5
+  using 60 workers
+....
+118 116 117 117
+
+avgTpar
+117
+200.5
