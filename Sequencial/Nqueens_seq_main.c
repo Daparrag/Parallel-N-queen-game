@@ -2,6 +2,8 @@
 #include <vector>
 #include <assert.h>
 #include <stdlib.h>
+#include <sys/timeb.h>
+#include <sys/types.h>
 #include <time.h>
 #include <string.h>
 
@@ -297,6 +299,19 @@ static void printResults(time_t* pt1, time_t* pt2)
     }
 }
 
+static void print_Results_mllisec(struct timeb * pt1, struct timeb * pt2){
+    double secs;
+
+    //printf("End: \t%s", ctime(pt2->time);
+                      double secs_t1 = ((double)(pt1->time)+((double)pt1->millitm/1000));
+                      double sec_t2 = ((double)(pt2->time)+((double)pt2->millitm/1000));
+                      secs = (sec_t2 - secs_t1);
+                      printf("Calculations took second: %f  \n", secs);
+    //
+
+
+}
+
 
 int main(int argc, char *argv[]){
 
@@ -312,14 +327,15 @@ int main(int argc, char *argv[]){
 /**************************************************************************************************************************************************************************************/
 PRINTF("Starting the computation of Nqueens with (N=%u)\n",queen_number);	
 init_solv();
-time_t t1, t2;
 
-time(&t1);
+struct timeb t1,t2;
+ftime(&t1);
 funct_solution_seq(global_variables.solv_tree,0,queen_number);
-time(&t2);
+ftime(&t2);
 int nSolutions=get_queen_array_size();//nsolv_ix;
 printf("num of solutions: %u\n",nSolutions);
-printResults(&t1, &t2);
+print_Results_mllisec(&t1,&t2);
+//printResults(&t1, &t2);
 /*
 int i;
 for (i=0;i<nSolutions;i++){

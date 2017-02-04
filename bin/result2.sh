@@ -5,8 +5,8 @@
 #
 
 # settable variables
-n=15
-max_nw=100
+n=13
+max_nw=60
 executions=6
 graph_dir=../docs
 delay=0
@@ -124,7 +124,7 @@ function average() {
 	else
 
 	
-		temp+=`./$binary $nw $n | awk 'NR==4'`
+		temp+=`./$binary $nw $n | awk 'NR==5'`
 		temp+="" 
 		sleep $delay
 		echo -n .
@@ -174,7 +174,7 @@ add_data_line() {
 
 check_parameters "$@"
 
-if [[ -e "main_seq" && -e "Nqueen_Pool" ]]
+if [[ -e "Nqueens_seq_main" && -e "Nqueens_pool" ]]
 then
 	
 if [ $executions <= 3 ]
@@ -185,35 +185,35 @@ fi
 	echo "===> processing $n <==="
     	echo
         echo -n "executing sequential code"	
-	average "main_seq" Tseq
+	average "Nqueens_seq_main" Tseq
 	echo
        	output_file=$graph_dir/'result'.N=$n.time=$timestamp.txt
         create_data_file
 	exeseq=0
-        echo -e " executing parallel code with thread" >> $output_file	
-		nw=0
-		for ((j=1;nw<max_nw;j++))
+ #       echo -e " executing parallel code with thread" >> $output_file	
+#		nw=0
+#		for ((j=1;nw<max_nw;j++))
 		#for nw in 1 `seq 2 2 $max_nw`
-		do
-			nw=$j
-			 if (( nw>max_nw ))
-			 then
-			 nw=$max_nw
-			 fi
-			echo -n "  using $nw workers"
-			echo
-			 average "Nqueen_Pool" avgTpar
-			 echo ${avgTpar}
+#		do
+#			nw=$j
+#			 if (( nw>max_nw ))
+#			 then
+#			 nw=$max_nw
+#			 fi
+#			echo -n "  using $nw workers"
+#			echo
+#			 average "test_threads" avgTpar
+#			 echo ${avgTpar}
 # save the parallel execution time with 1 worker to compute scalability
-	    		if ((nw == 1))
-	    		then
-			Tpar1=$avgTpar
-	    		fi
-			echo ${Tpar1}
+#	    		if ((nw == 1))
+#	    		then
+#			Tpar1=$avgTpar
+#	    		fi
+#			echo ${Tpar1}
 			
-	    	add_data_line
-	    done
-		echo -e " executing farm code" >> $output_file	
+#	    	add_data_line
+#	    done
+		echo -e " executing farm code with thread" >> $output_file	
 		nw=0
 		for ((j=1;nw<max_nw;j++))
 		#for nw in 1 `seq 2 2 $max_nw`
@@ -225,7 +225,7 @@ fi
 			 fi
 			echo -n "  using $nw workers"
 			echo
-			 average "Farm_Fast" avgTpar
+			 average "fastflow_farm" avgTpar
 			 echo ${avgTpar}
 # save the parallel execution time with 1 worker to compute scalability
 	    		if ((nw == 1))

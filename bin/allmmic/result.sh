@@ -8,7 +8,7 @@
 n=15
 max_nw=100
 executions=6
-graph_dir=../docs
+graph_dir=../../docs/mmic
 delay=0
 timestamp=$(date +%H-%M-%S)
 nw=0

@@ -192,7 +192,7 @@ fi
 	exeseq=0
         echo -e " executing parallel code with thread" >> $output_file	
 		nw=0
-		for ((j=1;nw<max_nw;j++))
+		for ((j=1;nw<max_nw;j=j+9))
 		#for nw in 1 `seq 2 2 $max_nw`
 		do
 			nw=$j
@@ -215,7 +215,7 @@ fi
 	    done
 		echo -e " executing farm code" >> $output_file	
 		nw=0
-		for ((j=1;nw<max_nw;j++))
+		for ((j=1;nw<max_nw;j=j+9))
 		#for nw in 1 `seq 2 2 $max_nw`
 		do
 			nw=$j

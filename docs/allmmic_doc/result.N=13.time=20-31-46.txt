@@ -1,0 +1,6 @@
+# 
+# Tseq = 
+# 
+NW 	|	TIME	|	SCALAB	|	SPEEDUP 	|	EFFICIENZA
+
+ executing parallel code with thread

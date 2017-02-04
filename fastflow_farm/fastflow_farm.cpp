@@ -40,6 +40,7 @@ struct Emitter:ff_node_t<ff_task_t>{
         error("Emitter, registerAllocator fails\n");
         return -1;
 		}
+		return 1;
 	}
 	
 
@@ -93,6 +94,7 @@ struct Emitter:ff_node_t<ff_task_t>{
 				struct queen * sent_seq = (struct queen*)ffalloc.malloc(n_workers * sizeof(struct queen));
 			
 				if((midle=ceil((float)n_workers/(float)(n_queens-3)))>(n_queens-2)){
+					midle=n_queens-2;
 					n_extremes=ceil(((float)n_workers-((float)(n_queens-3)*(float)((n_queens-2))))/((float)(n_queens-2)));
 				}
 			/*1. split the midle*/

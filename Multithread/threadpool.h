@@ -57,8 +57,8 @@ threadpool_t *threadpool_create(int thread_count, int queue_size, int flags);
  * @return 0 if all goes well, negative values in case of error (@see
  * threadpool_error_t for codes).
  */
-int threadpool_add(threadpool_t *pool, void (*routine)(void *),
-                   void *arg, int flags);
+int threadpool_add(threadpool_t *pool, void (*function)(void *),
+                   void *argument,size_t arg_size,int flags);
 
 /**
  * @function threadpool_destroy
@@ -76,6 +76,11 @@ int threadpool_destroy(threadpool_t *pool, int flags);
  /* @function threadpool_wait*/
  /* Wait until all jobs have finished */
 void thpool_wait(void * threadpool);
+
+
+/* @threadpool_set_wait*/
+ /* Avoid the fast ending of the computation. */
+void threadpool_set_wait(threadpool_t *pool, int flag);
 
 /* @function threadpool_wait*/
  /* return the number of free space of the queue*/
